@@ -6,6 +6,7 @@ const label2 = document.querySelector("#label2") as HTMLDivElement;
 const label3 = document.querySelector("#label3") as HTMLDivElement;
 const label4 = document.querySelector("#label4") as HTMLDivElement;
 const label5 = document.querySelector("#label5") as HTMLDivElement;
+const label6 = document.querySelector("#label6") as HTMLDivElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -57,6 +58,10 @@ async function setDevice(deviceId: string) {
     );
     label5.innerHTML = `diviceID:: ${deviceId}, ${!!deviceId}`;
     video.srcObject = stream;
+    const v = stream.getVideoTracks()[0];
+
+    label6.innerHTML = `ID: ${v.id} label: ${v.label}`;
+    console.log(v);
     const settings = stream.getVideoTracks()[0].getSettings();
     width = settings.width;
     height = settings.height;
