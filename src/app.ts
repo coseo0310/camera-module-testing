@@ -1,77 +1,66 @@
 const canvas = document.querySelector("#canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d")!;
 const video = document.querySelector("#video") as HTMLVideoElement;
-const label1 = document.querySelector("#label1") as HTMLDivElement;
-const label2 = document.querySelector("#label2") as HTMLDivElement;
-const label3 = document.querySelector("#label3") as HTMLDivElement;
-const label4 = document.querySelector("#label4") as HTMLDivElement;
-const label5 = document.querySelector("#label5") as HTMLDivElement;
-const label6 = document.querySelector("#label6") as HTMLDivElement;
-const btn = document.querySelector("button") as HTMLButtonElement;
+const btn1 = document.querySelector(".capture") as HTMLButtonElement;
+const btn2 = document.querySelector(".clear") as HTMLButtonElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
-let stream;
+let rotate: "vertical" | "horizontal" = "horizontal";
 let cnt = 0;
 
 video.addEventListener("canplaythrough", () => {
   canvas.width = width;
   canvas.height = height;
 });
-window.addEventListener("resize", async (e) => {});
+window.addEventListener("resize", async (e) => {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  let now: "vertical" | "horizontal";
+  if (width > height) {
+    now = "horizontal";
+  } else {
+    now = "vertical";
+  }
 
-btn.addEventListener("click", () => {
+  if (now !== rotate) {
+    setDevice();
+  }
+});
+
+btn1.addEventListener("click", () => {
   console.log("clcik?");
   capture();
 });
+btn2.addEventListener("click", () => {
+  console.log("clcik?");
+  clear();
+});
 
 const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
-label1.innerText = ` ${navigator.userAgent}, ${isMobile}`;
 
-async function getCameras() {
-  try {
-    let option;
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    const cameras = devices.filter((device) => device.kind === "videoinput");
-    cameras.forEach((camera) => {
-      option = document.createElement("option");
-      option.value = camera.deviceId;
-      option.innerText = camera.label;
-    });
-    label3.innerHTML = JSON.stringify(cameras);
-    label4.innerHTML = `${option.value} - ${option.innerText}`;
-    return cameras[0].deviceId;
-  } catch (error) {
-    console.error(error);
-  }
-}
 async function setDevice() {
   try {
     const initalConstrains = {
       audio: false,
-      video: { facingMode: "environment" },
+      video: { facingMode: "environment", width: 1280, height: 720 },
     };
     const cameraConstrainsts = {
       audio: false,
-      video: true,
+      video: {
+        width: 1920,
+        height: 1080,
+      },
     };
     const stream = await navigator.mediaDevices.getUserMedia(
       !isMobile ? cameraConstrainsts : initalConstrains
     );
+
+    video.height = height;
     video.srcObject = stream;
     const v = stream.getVideoTracks()[0];
-
-    label6.innerHTML = `ID: ${v.id} label: ${v.label} enabled: ${v.enabled}`;
-    console.log(v);
-    const settings = stream.getVideoTracks()[0].getSettings();
-    width = settings.width;
-    height = settings.height;
-    label5.innerHTML = "";
-    label2.innerText = `${width}, ${height} - ${cnt++}`;
-    console.log("stream", width, height);
   } catch (error) {
     console.error(error);
-    label5.innerHTML = error;
   }
 }
 
@@ -92,9 +81,15 @@ function capture() {
   //   ctx.drawImage(video, 0, 0, width, height);
   //   ctx.restore();
   // }
-  ctx.drawImage(video, 0, 0, width, height);
+  console.log(video.width, height);
 
-  // requestAnimationFrame(render);
+  canvas.width = height / 0.5625;
+  canvas.height = height;
+  ctx.drawImage(video, 0, 0, height / 0.5625, height);
+}
+
+function clear() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 window.onload = async () => {
