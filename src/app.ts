@@ -45,16 +45,17 @@ async function setDevice(deviceId: string) {
   try {
     const initalConstrains = {
       audio: false,
-      // video: { facingMode: "environment" },
-      video: true,
+      video: { facingMode: "environment" },
+      // video: true,
     };
     const cameraConstrainsts = {
       audio: false,
       video: { deviceId: { exact: deviceId } },
     };
     const stream = await navigator.mediaDevices.getUserMedia(
-      deviceId ? cameraConstrainsts : initalConstrains
+      !!deviceId ? cameraConstrainsts : initalConstrains
     );
+    label5.innerHTML = `diviceID:: ${deviceId}, ${!!deviceId}`;
     video.srcObject = stream;
     const settings = stream.getVideoTracks()[0].getSettings();
     width = settings.width;
