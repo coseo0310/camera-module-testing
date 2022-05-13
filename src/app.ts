@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d")!;
 const video = document.querySelector("#video") as HTMLVideoElement;
 const label1 = document.querySelector("#label1") as HTMLDivElement;
 const label2 = document.querySelector("#label2") as HTMLDivElement;
+const btn = document.querySelector("button") as HTMLButtonElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -17,14 +18,18 @@ window.addEventListener("resize", (e) => {
   // setDevice();
 });
 
+btn.addEventListener("click", () => {
+  setDevice("environment");
+});
+
 const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
 label1.innerText = ` ${navigator.userAgent}, ${isMobile}`;
-async function setDevice() {
+async function setDevice(t: string = "user") {
   try {
     const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: false,
-      video: isMobile ? { facingMode: { exact: "environment" } } : true,
+      video: isMobile ? { facingMode: { exact: t } } : true,
     });
     video.srcObject = stream;
     const settings = stream.getVideoTracks()[0].getSettings();
