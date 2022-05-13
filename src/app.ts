@@ -5,6 +5,7 @@ const label1 = document.querySelector("#label1") as HTMLDivElement;
 const label2 = document.querySelector("#label2") as HTMLDivElement;
 const label3 = document.querySelector("#label3") as HTMLDivElement;
 const label4 = document.querySelector("#label4") as HTMLDivElement;
+const label5 = document.querySelector("#label5") as HTMLDivElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -34,18 +35,25 @@ async function getCameras() {
     });
     label3.innerHTML = JSON.stringify(cameras);
     label4.innerHTML = `${option.value} - ${option.innerText}`;
+    return cameras[0].deviceId;
   } catch (error) {
     console.error(error);
   }
 }
-async function setDevice(t: string = "user") {
+async function setDevice(deviceId: string) {
   console.log(getCameras());
   try {
-    const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: isMobile ? { facingMode: { exact: t } } : true,
-    });
+    const initalConstrains = {
+      audio: true,
+      video: { facingMode: "user" },
+    };
+    const cameraConstrainsts = {
+      audio: true,
+      video: { deviceId: { exact: deviceId } },
+    };
+    const stream = await navigator.mediaDevices.getUserMedia(
+      deviceId ? cameraConstrainsts : initalConstrains
+    );
     video.srcObject = stream;
     const settings = stream.getVideoTracks()[0].getSettings();
     width = settings.width;
@@ -54,6 +62,7 @@ async function setDevice(t: string = "user") {
     console.log("stream", width, height);
   } catch (error) {
     console.error(error);
+    label5.innerHTML = error;
   }
 }
 
@@ -78,6 +87,6 @@ function render(t = 0) {
   requestAnimationFrame(render);
 }
 
-window.onload = () => {
-  setDevice();
+window.onload = async () => {
+  setDevice(await getCameras());
 };
