@@ -6,6 +6,8 @@ const btn2 = document.querySelector(".clear") as HTMLButtonElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
+let videoWidth = 1980;
+let videoHeight = 1080;
 let rotate: "vertical" | "horizontal" = "horizontal";
 let cnt = 0;
 
@@ -14,6 +16,7 @@ video.addEventListener("canplaythrough", () => {
   canvas.height = height;
 });
 window.addEventListener("resize", async (e) => {
+  console.log(width, height);
   width = window.innerWidth;
   height = window.innerHeight;
   let now: "vertical" | "horizontal";
@@ -24,6 +27,7 @@ window.addEventListener("resize", async (e) => {
   }
 
   if (now !== rotate) {
+    rotate = now;
     setDevice();
   }
 });
@@ -48,15 +52,25 @@ async function setDevice() {
     const cameraConstrainsts = {
       audio: false,
       video: {
-        width: 1920,
-        height: 1080,
+        width: videoWidth,
+        height: videoHeight,
       },
     };
     const stream = await navigator.mediaDevices.getUserMedia(
       !isMobile ? cameraConstrainsts : initalConstrains
     );
 
-    video.height = height;
+    console.log(">>", rotate);
+    if (rotate === "horizontal") {
+      video.width = width;
+      video.height = width * 0.5625;
+      console.log(video, "w", width);
+    } else {
+      video.width = height / 0.5625;
+      video.height = height;
+      console.log(video, "h", height);
+    }
+
     video.srcObject = stream;
     const v = stream.getVideoTracks()[0];
   } catch (error) {
@@ -83,9 +97,9 @@ function capture() {
   // }
   console.log(video.width, height);
 
-  canvas.width = height / 0.5625;
-  canvas.height = height;
-  ctx.drawImage(video, 0, 0, height / 0.5625, height);
+  canvas.width = video.clientWidth;
+  canvas.height = video.clientHeight;
+  ctx.drawImage(video, 0, 0, video.width, video.height);
 }
 
 function clear() {

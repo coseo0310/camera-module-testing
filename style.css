@@ -19,6 +19,10 @@ body {
   justify-content: center;
   overflow: hidden;
 }
+/* 
+#video {
+  height: 100%;
+} */
 
 #canvas {
   position: absolute;
