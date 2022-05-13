@@ -18,9 +18,7 @@ video.addEventListener("canplaythrough", () => {
   canvas.width = width;
   canvas.height = height;
 });
-window.addEventListener("resize", async (e) => {
-  setDevice();
-});
+window.addEventListener("resize", async (e) => {});
 
 btn.addEventListener("click", () => {
   console.log("clcik?");
