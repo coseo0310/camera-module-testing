@@ -1,7 +1,7 @@
 const canvas = document.querySelector("#canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d")!;
-const video = document.createElement("video");
-video.autoplay = true;
+const video = document.querySelector("#video") as HTMLVideoElement;
+const label = document.querySelector("#label") as HTMLDivElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -17,11 +17,13 @@ window.addEventListener("resize", (e) => {
   setDevice();
 });
 
+console.log(">>", navigator.userAgent);
+label.innerText = navigator.userAgent;
 async function setDevice() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: false,
-      video: true,
+      video: { facingMode: { exact: "environment" } },
     });
     video.srcObject = stream;
     const settings = stream.getVideoTracks()[0].getSettings();
@@ -47,17 +49,13 @@ function render(t = 0) {
   if (now > fpsTime) {
     time = t;
     ctx.save();
-    ctx.drawImage(video, 0, 0, width, height);
+    // ctx.drawImage(video, 0, 0, width, height);
     ctx.restore();
   }
 
   requestAnimationFrame(render);
 }
 
-function test() {
-  const a = canvas.captureStream(60);
-}
-
 window.onload = () => {
-  setDevice();
+  // setDevice();
 };
