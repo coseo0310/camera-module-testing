@@ -11,14 +11,14 @@ let stream;
 video.addEventListener("canplaythrough", () => {
   canvas.width = width;
   canvas.height = height;
-  render();
+  // render();
 });
 window.addEventListener("resize", (e) => {
-  setDevice();
+  // setDevice();
 });
 
-console.log(">>", navigator.userAgent);
-label1.innerText = navigator.userAgent;
+const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
+label1.innerText = ` ${navigator.userAgent}, ${isMobile}`;
 async function setDevice() {
   try {
     const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
