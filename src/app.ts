@@ -17,8 +17,8 @@ video.addEventListener("canplaythrough", () => {
   canvas.height = height;
   // render();
 });
-window.addEventListener("resize", (e) => {
-  // setDevice();
+window.addEventListener("resize", async (e) => {
+  setDevice(await getCameras());
 });
 
 const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
