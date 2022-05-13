@@ -1,7 +1,8 @@
 const canvas = document.querySelector("#canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d")!;
 const video = document.querySelector("#video") as HTMLVideoElement;
-const label = document.querySelector("#label") as HTMLDivElement;
+const label1 = document.querySelector("#label1") as HTMLDivElement;
+const label2 = document.querySelector("#label2") as HTMLDivElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -13,22 +14,23 @@ video.addEventListener("canplaythrough", () => {
   render();
 });
 window.addEventListener("resize", (e) => {
-  console.log("resize", window.innerWidth, window.innerHeight);
   setDevice();
 });
 
 console.log(">>", navigator.userAgent);
-label.innerText = navigator.userAgent;
+label1.innerText = navigator.userAgent;
 async function setDevice() {
   try {
+    const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: false,
-      video: { facingMode: { exact: "environment" } },
+      video: isMobile ? { facingMode: { exact: "environment" } } : true,
     });
     video.srcObject = stream;
     const settings = stream.getVideoTracks()[0].getSettings();
     width = settings.width;
     height = settings.height;
+    label2.innerText = `${width}, ${height}`;
     console.log("stream", width, height);
   } catch (error) {
     console.error(error);
@@ -57,5 +59,5 @@ function render(t = 0) {
 }
 
 window.onload = () => {
-  // setDevice();
+  setDevice();
 };
