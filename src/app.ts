@@ -44,11 +44,12 @@ async function setDevice(deviceId: string) {
   console.log(getCameras());
   try {
     const initalConstrains = {
-      audio: true,
-      video: { facingMode: "user" },
+      audio: false,
+      // video: { facingMode: "environment" },
+      video: true,
     };
     const cameraConstrainsts = {
-      audio: true,
+      audio: false,
       video: { deviceId: { exact: deviceId } },
     };
     const stream = await navigator.mediaDevices.getUserMedia(
