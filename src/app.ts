@@ -3,7 +3,8 @@ const ctx = canvas.getContext("2d")!;
 const video = document.querySelector("#video") as HTMLVideoElement;
 const label1 = document.querySelector("#label1") as HTMLDivElement;
 const label2 = document.querySelector("#label2") as HTMLDivElement;
-const btn = document.querySelector("button") as HTMLButtonElement;
+const label3 = document.querySelector("#label3") as HTMLDivElement;
+const label4 = document.querySelector("#label4") as HTMLDivElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -18,13 +19,27 @@ window.addEventListener("resize", (e) => {
   // setDevice();
 });
 
-btn.addEventListener("click", () => {
-  setDevice("environment");
-});
-
 const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
 label1.innerText = ` ${navigator.userAgent}, ${isMobile}`;
+
+async function getCameras() {
+  try {
+    let option;
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const cameras = devices.filter((device) => device.kind === "videoinput");
+    cameras.forEach((camera) => {
+      option = document.createElement("option");
+      option.value = camera.deviceId;
+      option.innerText = camera.label;
+    });
+    label3.innerHTML = JSON.stringify(cameras);
+    label4.innerHTML = `${option.value} - ${option.innerText}`;
+  } catch (error) {
+    console.error(error);
+  }
+}
 async function setDevice(t: string = "user") {
+  console.log(getCameras());
   try {
     const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
     const stream = await navigator.mediaDevices.getUserMedia({
