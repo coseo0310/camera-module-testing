@@ -83,20 +83,6 @@ let fps = 60;
 let fpsTime = 1000 / fps;
 
 function capture() {
-  // if (!time) {
-  //   time = t;
-  // }
-
-  // const now = t - time;
-
-  // if (now > fpsTime) {
-  //   time = t;
-  //   ctx.save();
-  //   ctx.drawImage(video, 0, 0, width, height);
-  //   ctx.restore();
-  // }
-  console.log(video.width, height);
-
   canvas.width = video.clientWidth;
   canvas.height = video.clientHeight;
   ctx.drawImage(video, 0, 0, video.width, video.height);
@@ -107,5 +93,14 @@ function clear() {
 }
 
 window.onload = async () => {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  let now: "vertical" | "horizontal";
+  if (width > height) {
+    now = "horizontal";
+  } else {
+    now = "vertical";
+  }
+  rotate = now;
   setDevice();
 };
