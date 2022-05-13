@@ -6,7 +6,7 @@ const btn2 = document.querySelector(".clear") as HTMLButtonElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
-let videoWidth = 1980;
+let videoWidth = 1920;
 let videoHeight = 1080;
 let rotate: "vertical" | "horizontal" = "horizontal";
 let cnt = 0;

@@ -18,6 +18,8 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  max-width: 1920;
+  max-height: 1080;
 }
 /* 
 #video {
