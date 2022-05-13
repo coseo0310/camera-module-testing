@@ -7,18 +7,24 @@ const label3 = document.querySelector("#label3") as HTMLDivElement;
 const label4 = document.querySelector("#label4") as HTMLDivElement;
 const label5 = document.querySelector("#label5") as HTMLDivElement;
 const label6 = document.querySelector("#label6") as HTMLDivElement;
+const btn = document.querySelector("button") as HTMLButtonElement;
 
 let width = window.innerWidth;
 let height = window.innerHeight;
 let stream;
+let cnt = 0;
 
 video.addEventListener("canplaythrough", () => {
   canvas.width = width;
   canvas.height = height;
-  // render();
 });
 window.addEventListener("resize", async (e) => {
-  setDevice(await getCameras());
+  setDevice();
+});
+
+btn.addEventListener("click", () => {
+  console.log("clcik?");
+  capture();
 });
 
 const isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
@@ -41,31 +47,29 @@ async function getCameras() {
     console.error(error);
   }
 }
-async function setDevice(deviceId: string) {
-  console.log(getCameras());
+async function setDevice() {
   try {
     const initalConstrains = {
       audio: false,
       video: { facingMode: "environment" },
-      // video: true,
     };
     const cameraConstrainsts = {
       audio: false,
-      video: { deviceId: { exact: deviceId } },
+      video: true,
     };
     const stream = await navigator.mediaDevices.getUserMedia(
-      !!deviceId ? cameraConstrainsts : initalConstrains
+      !isMobile ? cameraConstrainsts : initalConstrains
     );
-    label5.innerHTML = `diviceID:: ${deviceId}, ${!!deviceId}`;
     video.srcObject = stream;
     const v = stream.getVideoTracks()[0];
 
-    label6.innerHTML = `ID: ${v.id} label: ${v.label}`;
+    label6.innerHTML = `ID: ${v.id} label: ${v.label} enabled: ${v.enabled}`;
     console.log(v);
     const settings = stream.getVideoTracks()[0].getSettings();
     width = settings.width;
     height = settings.height;
-    label2.innerText = `${width}, ${height}`;
+    label5.innerHTML = "";
+    label2.innerText = `${width}, ${height} - ${cnt++}`;
     console.log("stream", width, height);
   } catch (error) {
     console.error(error);
@@ -77,23 +81,24 @@ let time = 0;
 let fps = 60;
 let fpsTime = 1000 / fps;
 
-function render(t = 0) {
-  if (!time) {
-    time = t;
-  }
+function capture() {
+  // if (!time) {
+  //   time = t;
+  // }
 
-  const now = t - time;
+  // const now = t - time;
 
-  if (now > fpsTime) {
-    time = t;
-    ctx.save();
-    // ctx.drawImage(video, 0, 0, width, height);
-    ctx.restore();
-  }
+  // if (now > fpsTime) {
+  //   time = t;
+  //   ctx.save();
+  //   ctx.drawImage(video, 0, 0, width, height);
+  //   ctx.restore();
+  // }
+  ctx.drawImage(video, 0, 0, width, height);
 
-  requestAnimationFrame(render);
+  // requestAnimationFrame(render);
 }
 
 window.onload = async () => {
-  setDevice(await getCameras());
+  setDevice();
 };
