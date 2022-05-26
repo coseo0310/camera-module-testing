@@ -1,12 +1,14 @@
-import typescript from "rollup-plugin-typescript2";
-import tslint from "rollup-plugin-tslint";
+// import typescript from "rollup-plugin-typescript2";
+// import tslint from "rollup-plugin-tslint";
 import { uglify } from "rollup-plugin-uglify";
 
+// typescript({ clean: true, sourceMap: false }), tslint(),
+
 export default {
-  input: "src/app.ts",
+  input: "src/deomo.js",
   output: {
-    file: "dist/main.js",
-    format: "cjs",
+    file: "example/module/main.js",
+    format: "esm",
   },
-  plugins: [typescript(), tslint(), uglify()],
+  plugins: [uglify()],
 };

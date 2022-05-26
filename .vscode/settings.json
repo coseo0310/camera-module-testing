@@ -1,0 +1,8 @@
+{
+  "liveServer.settings.port": 5500,
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#80ff5d",
+    "titleBar.inactiveBackground": "#80ff5d"
+  },
+  "explorer.compactFolders": false
+}
