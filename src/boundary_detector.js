@@ -19,6 +19,7 @@ export async function load(model_path) {
 export async function detect(img, model) {
   let [tfjsModel, pyodide] = model;
   let [pts, pts_score, vmap] = inference_tfjs(img, tfjsModel);
+
   let square = [];
   try {
     square = await pred_squares(pyodide, pts, pts_score, vmap);

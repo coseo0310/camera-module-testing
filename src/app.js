@@ -1,4 +1,5 @@
 import { load, detect } from "./boundary_detector.js";
+
 // Libary Loaded
 import "./lib/tfjs@3.18.0/dist/tf.min.js";
 import "./lib/tfjs-backend-wasm@3.18.0/dist/tf-backend-wasm.js";
@@ -116,7 +117,8 @@ async function getDetection(imgEl) {
   imgEl.width = 320;
   imgEl.height = 320;
   const img = window.tf.browser.fromPixels(imgEl);
-  console.log("model", img, imgEl);
+  console.log("model", imgEl);
+  document.body.appendChild(imgEl);
   const square = await detect(img, model);
   console.log("square::", square);
 }
