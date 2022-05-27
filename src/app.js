@@ -117,10 +117,10 @@ async function getDetection(imgEl) {
   imgEl.width = 320;
   imgEl.height = 320;
   const img = window.tf.browser.fromPixels(imgEl);
-  console.log("model", imgEl);
-  document.body.appendChild(imgEl);
   const square = await detect(img, model);
-  console.log("square::", square);
+  const di = document.createElement("div");
+  di.innerText = `data:::: ${JSON.stringify(square)}`;
+  document.body.appendChild(di);
 }
 
 function clear() {
