@@ -78,14 +78,6 @@ async function setDevice() {
       !isMobile ? cameraConstrainsts : initalConstrains
     );
 
-    // if (rotate === "horizontal") {
-    //   video.width = videoWidth;
-    //   video.height = videoWidth * 0.5625;
-    // } else {
-    //   video.width = videoHeight / 0.5625;
-    //   video.height = videoHeight;
-    // }
-
     video.srcObject = stream;
   } catch (error) {
     console.error(error);
@@ -107,20 +99,30 @@ async function capture() {
 
   ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
   isCapture = true;
-  const dataUrl = canvas.toDataURL();
+  const dataUrl = await canvas.toDataURL();
   const imgEl = new Image();
   imgEl.src = dataUrl;
-  await getDetection(imgEl);
-}
+  imgEl.onload = async () => {
+    imgEl.width = 320;
+    imgEl.height = 320;
 
-async function getDetection(imgEl) {
-  imgEl.width = 320;
-  imgEl.height = 320;
-  const img = window.tf.browser.fromPixels(imgEl);
-  const square = await detect(img, model);
-  const di = document.createElement("div");
-  di.innerText = `data:::: ${JSON.stringify(square)}`;
-  document.body.appendChild(di);
+    const img = window.tf.browser.fromPixels(imgEl);
+    const square = await detect(img, model);
+
+    console.log(square);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(square[0][0], square[0][1]);
+    ctx.lineTo(square[1][0], square[1][1]);
+    ctx.lineTo(square[2][0], square[2][1]);
+    ctx.lineTo(square[3][0], square[3][1]);
+    ctx.lineTo(square[0][0], square[0][1]);
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+  };
 }
 
 function clear() {
