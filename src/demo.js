@@ -46,9 +46,10 @@ async function handleClickTrigger(trigger, model) {
   // Run inference and draw the result on the corresponding canvas.
   const canvas = imageContainer.querySelector("canvas");
   const ctx = canvas.getContext("2d");
-
+  console.log(">>", srcMedia);
   // Get pixels data.
   const img = tf.browser.fromPixels(srcMedia);
+  console.log(">>", srcMedia, img);
   let time_now = Date.now();
   let finish_time = 0;
 
