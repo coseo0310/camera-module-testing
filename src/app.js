@@ -13,6 +13,7 @@ const ctx = canvas.getContext("2d");
 const video = document.querySelector("#video");
 const btn1 = document.querySelector(".capture");
 
+let stream = null;
 let model = null;
 let width = cameraWrap.clientWidth;
 let height = cameraWrap.clientHeight;
@@ -74,14 +75,28 @@ async function setDevice() {
         height: videoHeight,
       },
     };
-    const stream = await navigator.mediaDevices.getUserMedia(
+    stream = await navigator.mediaDevices.getUserMedia(
       !isMobile ? cameraConstrainsts : initalConstrains
     );
 
     video.srcObject = stream;
+
+    setTimeout(async () => {
+      // stream.dispose();
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: false,
+        audio: false,
+      });
+    }, 1000);
   } catch (error) {
     console.error(error);
   }
+}
+
+function videoClose() {
+  video.pause();
+  video.src = "";
+  stream.getTracks()[0].stop();
 }
 
 async function capture() {
@@ -108,8 +123,6 @@ async function capture() {
 
     const img = window.tf.browser.fromPixels(imgEl);
     const square = await detect(img, model);
-
-    console.log(square);
 
     ctx.save();
     ctx.beginPath();
@@ -144,7 +157,7 @@ function setSection() {
   ctx.restore();
 }
 
-window.onload = async () => {
+window.addEventListener("load", () => {
   width = container.clientWidth;
   height = container.clientHeight;
   let now;
@@ -156,4 +169,10 @@ window.onload = async () => {
   rotate = now;
   setSection();
   setDevice();
-};
+});
+
+window.addEventListener("beforeunload", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  videoClose();
+});
