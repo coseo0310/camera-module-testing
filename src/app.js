@@ -11,6 +11,8 @@ let isRealtime = false;
 
 container.appendChild(detector.getElement());
 
+console.log(navigator.userAgent);
+
 btn1.addEventListener("click", () => {
   btn1.classList.toggle("on");
   isRealtime = false;

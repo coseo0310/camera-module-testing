@@ -24,6 +24,7 @@ export default class Detector {
     height: 0,
   };
 
+  isMobile = navigator.userAgent.toLocaleLowerCase().includes("mobile");
   isCapture = false;
   isLoading = false;
   isDetect = false;
