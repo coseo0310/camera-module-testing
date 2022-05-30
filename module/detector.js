@@ -176,7 +176,6 @@ export default class Detector {
       if (square.length > 0) {
         await this.setLine(square);
       }
-      this.setLine(square);
     }).bind(this);
   }
 
