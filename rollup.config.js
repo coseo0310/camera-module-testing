@@ -3,9 +3,9 @@
 import { uglify } from "rollup-plugin-uglify";
 // typescript({ clean: true, sourceMap: false }), tslint(),
 export default {
-  input: "src/app.js",
+  input: "./module/detector.js",
   output: {
-    file: "example/module/main.js",
+    file: "example/module/detector.js",
     format: "esm",
   },
   plugins: [uglify()],
