@@ -4,19 +4,27 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style/style.css"></style>
+    <link rel="stylesheet" href="style/style.css"/>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
     <title>Camera</title>
   </head>
   <body>
     <div class="container">
-      <div class="camera-wrap">
+      <!-- <div class="camera-wrap">
         <video id="video" autoplay muted playsinline="true"></video>
         <canvas id="canvas" ></canvas>
-      </div>
+      </div> -->
       <div class="btn-wrap">
         <button class="capture"></button>
-        <!-- <button class="clear"></button> -->
-      </div>
+        <button class="realtime"></button>
+      </div> 
     </div>
     <script type="module" src="./app.js"></script>
     </script>

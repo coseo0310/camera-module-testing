@@ -25,7 +25,6 @@ export async function detect(img, model) {
     square = await pred_squares(pyodide, pts, pts_score, vmap);
     // square = pred_squares_numjs(pts, pts_score, vmap);
   } catch (error) {
-    console.log("error", error);
     square = [];
   }
   return square;
