@@ -157,7 +157,7 @@ export default class Detector {
     if (!this.isLoading) {
       return;
     }
-    await this.setRealtimeDetect(false);
+    // await this.setRealtimeDetect(false);
     this.isCapture = true;
     this.isAnimate = false;
     this.clearCanvas();
@@ -184,8 +184,10 @@ export default class Detector {
   async setRealtimeDetect(is = true) {
     this.isAnimate = is;
     await this.clearCanvas();
-    await this.setSection();
-    this.animate();
+    if (is) {
+      await this.setSection();
+      this.animate();
+    }
   }
 
   async animate(t = 0) {

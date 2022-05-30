@@ -13,10 +13,13 @@ container.appendChild(detector.getElement());
 
 console.log(navigator.userAgent);
 
-btn1.addEventListener("click", () => {
+btn1.addEventListener("click", async () => {
   if (!detector.isLoading) {
     return;
   }
+  isRealtime = false;
+  btn2.classList.remove("on");
+
   btn1.classList.toggle("on");
   isRealtime = false;
   if (isCapture) {
@@ -32,6 +35,7 @@ btn2.addEventListener("click", () => {
   if (isCapture || !detector.isLoading) {
     return;
   }
+
   btn2.classList.toggle("on");
   if (isRealtime) {
     isRealtime = false;
