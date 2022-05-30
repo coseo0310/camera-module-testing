@@ -32,6 +32,8 @@ export default class Detector {
 
   loaderCallback = null;
 
+  square = [];
+
   constructor() {
     this.setModel();
     this.setElement();
@@ -137,6 +139,7 @@ export default class Detector {
     this.ctx.lineWidth = 2;
     this.ctx.stroke();
     this.ctx.restore();
+    this.square = square;
   }
 
   async setLoaderCallback(c) {
@@ -228,6 +231,10 @@ export default class Detector {
     this.clearCanvas();
     this.setSection();
     this.isCapture = false;
+  }
+
+  getSquare() {
+    return square;
   }
 
   clearCanvas() {
