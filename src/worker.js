@@ -16,38 +16,54 @@ worker.onmessage = async (e) => {
   let tensor = null;
   switch (e.data.type) {
     case "setModel":
-      if (!model) {
-        model = await load("./tfjs320f16/model.json");
+      try {
+        if (!model) {
+          model = await load("./tfjs320f16/model.json");
+          postMessage({ type: "setModel" });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
         postMessage({ type: "setModel" });
       }
       break;
     case "getSquare":
-      for (const v of e.data.rgb) {
-        if (cnt === 4) {
-          cnt = 1;
-          continue;
+      try {
+        for (const v of e.data.rgb) {
+          if (cnt === 4) {
+            cnt = 1;
+            continue;
+          }
+          rgb.push(v);
+          cnt += 1;
         }
-        rgb.push(v);
-        cnt += 1;
+        tensor = tf.tensor(rgb);
+        tensor = tensor.reshape([320, 320, 3]);
+        const square1 = await detect(tensor, model);
+        postMessage({ type: "getCapture", square: square1 });
+      } catch (error) {
+        console.error(error);
+        postMessage({ type: "getCapture", square: [] });
       }
-      tensor = tf.tensor(rgb);
-      tensor = tensor.reshape([320, 320, 3]);
-      const square1 = await detect(tensor, model);
-      postMessage({ type: "getCapture", square: square1 });
       break;
     case "getAnimate":
-      for (const v of e.data.rgb) {
-        if (cnt === 4) {
-          cnt = 1;
-          continue;
+      try {
+        for (const v of e.data.rgb) {
+          if (cnt === 4) {
+            cnt = 1;
+            continue;
+          }
+          rgb.push(v);
+          cnt += 1;
         }
-        rgb.push(v);
-        cnt += 1;
+        tensor = tf.tensor(rgb);
+        tensor = tensor.reshape([320, 320, 3]);
+        const square2 = await detect(tensor, model);
+        postMessage({ type: "getAnimate", square: square2 });
+      } catch (error) {
+        console.error(error);
+        postMessage({ type: "getCapture", square: [] });
       }
-      tensor = tf.tensor(rgb);
-      tensor = tensor.reshape([320, 320, 3]);
-      const square2 = await detect(tensor, model);
-      postMessage({ type: "getAnimate", square: square2 });
       break;
     default:
       break;

@@ -5,7 +5,6 @@ import "../lib/tfjs@3.18.0/dist/tf.min.js";
 import "../lib/tfjs-backend-wasm@3.18.0/dist/tf-backend-wasm.js";
 import "../lib/numjs-master/dist/numjs.min.js";
 import "../lib/pyodide@0.20.0/pyodide.js";
-
 export default class Detector {
   cameraWrap = document.createElement("div");
   loader = document.createElement("div");
@@ -30,6 +29,7 @@ export default class Detector {
   isDetect = false;
   isAnimate = false;
   isWorker = true;
+  isSafari = navigator.userAgent.toLocaleLowerCase().includes("safari");
 
   loaderCallback = null;
 
@@ -38,6 +38,7 @@ export default class Detector {
   worker = null;
 
   constructor() {
+    this.isWorker = !this.isSafari;
     if (this.isWorker && window.Worker) {
       this.worker = new Worker("./module/worker.js", { type: "module" });
       this.worker.onmessage = async (e) => {
@@ -144,6 +145,9 @@ export default class Detector {
           height: this.videoHeight,
         },
       };
+      if (!navigator.mediaDevices.getUserMedia) {
+        return;
+      }
       this.stream = await navigator.mediaDevices.getUserMedia(
         !this.isMobile ? cameraConstrainsts : initalConstrains
       );
@@ -240,8 +244,11 @@ export default class Detector {
 
   async setRealtimeDetect(is = true) {
     this.isAnimate = is;
+
     if (is) {
       this.animate();
+    } else {
+      this.isDetect = false;
     }
   }
 
@@ -261,6 +268,7 @@ export default class Detector {
       if (this.isWorker && window.Worker) {
         const { data } = ctx.getImageData(0, 0, 320, 320);
         this.worker.postMessage({ type: "getAnimate", rgb: data });
+        return;
       } else {
         const dataUrl = await canvas.toDataURL();
         const imgEl = new Image();
@@ -281,9 +289,10 @@ export default class Detector {
           }
           this.isDetect = false;
         }).bind(this);
-        requestAnimationFrame(this.animate.bind(this));
       }
     }
+
+    requestAnimationFrame(this.animate.bind(this));
   }
 
   async resetCapture() {

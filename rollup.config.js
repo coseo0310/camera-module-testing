@@ -3,13 +3,13 @@
 import { uglify } from "rollup-plugin-uglify";
 // typescript({ clean: true, sourceMap: false }), tslint(),
 
-const isWorker = true;
+const isWorker = false;
 
 export default {
-  input: isWorker ? "./src/worker.js" : "./module/detector.js",
+  input: isWorker ? "./src/worker.js" : "./src/detector.js",
   output: {
-    file: isWorker ? "./src/worker.js" : "./example/module/detector.js",
+    file: isWorker ? "./module/worker.js" : "./module/detector.js",
     format: "esm",
   },
-  plugins: [uglify()],
+  plugins: [],
 };
