@@ -180,6 +180,8 @@ export default class Detector {
       const square = await detect(img, this.model);
       if (square.length > 0) {
         await this.setLine(square);
+      } else {
+        this.square = [];
       }
     }).bind(this);
   }
@@ -220,6 +222,8 @@ export default class Detector {
         await this.setSection();
         if (square.length > 0) {
           await this.setLine(square);
+        } else {
+          this.square = [];
         }
         this.isDetect = false;
       }).bind(this);
