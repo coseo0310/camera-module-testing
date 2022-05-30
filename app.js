@@ -1,4 +1,4 @@
-import Detector from "./module/detector.js";
+import Detector from "./example/module/detector.js";
 
 const container = document.querySelector(".container");
 const btn1 = document.querySelector(".capture");
