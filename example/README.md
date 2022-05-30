@@ -68,3 +68,13 @@ type isRealtime = boolean;
 const isRealtime = true; // datault true
 detector.setRealtimeDetect(isRealtime);
 ```
+
+### 📬 getSquare
+
+---
+
+실시간 디텍트된 라인 값을 리턴합니다.
+
+```ts
+const square = detector.getSquare();
+```
