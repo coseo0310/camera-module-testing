@@ -11,8 +11,6 @@ let isRealtime = false;
 
 container.appendChild(detector.getElement());
 
-console.log(navigator.userAgent);
-
 btn1.addEventListener("click", async () => {
   if (!detector.isLoading) {
     return;

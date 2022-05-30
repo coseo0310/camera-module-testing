@@ -157,7 +157,7 @@ export default class Detector {
     if (!this.isLoading) {
       return;
     }
-    // await this.setRealtimeDetect(false);
+    await this.setRealtimeDetect(false);
     this.isCapture = true;
     this.isAnimate = false;
     this.clearCanvas();
