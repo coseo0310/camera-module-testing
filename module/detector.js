@@ -157,6 +157,7 @@ export default class Detector {
     if (!this.isLoading) {
       return;
     }
+    this.isCapture = true;
     this.isAnimate = false;
     this.clearCanvas();
 
@@ -202,6 +203,9 @@ export default class Detector {
       const imgEl = new Image();
       imgEl.src = dataUrl;
       imgEl.onload = (async () => {
+        if (this.isCapture) {
+          return;
+        }
         imgEl.width = 320;
         imgEl.height = 320;
         const img = window.tf.browser.fromPixels(imgEl);
@@ -220,6 +224,7 @@ export default class Detector {
   async resetCapture() {
     this.clearCanvas();
     this.setSection();
+    this.isCapture = false;
   }
 
   clearCanvas() {
