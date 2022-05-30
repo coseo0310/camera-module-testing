@@ -1,10 +1,10 @@
 import { load, detect } from "./boundary_detector.js";
 
 // Libary Loaded
-import "./lib/tfjs@3.18.0/dist/tf.min.js";
-import "./lib/tfjs-backend-wasm@3.18.0/dist/tf-backend-wasm.js";
-import "./lib/numjs-master/dist/numjs.min.js";
-import "./lib/pyodide@0.20.0/pyodide.js";
+import "../lib/tfjs@3.18.0/dist/tf.min.js";
+import "../lib/tfjs-backend-wasm@3.18.0/dist/tf-backend-wasm.js";
+import "../lib/numjs-master/dist/numjs.min.js";
+import "../lib/pyodide@0.20.0/pyodide.js";
 
 export default class Detector {
   cameraWrap = document.createElement("div");
@@ -144,7 +144,7 @@ export default class Detector {
 
   async setModel() {
     // 모델 로드
-    this.model = await load("./tfjs320f16/model.json");
+    this.model = await load("./module/tfjs320f16/model.json");
     this.isLoading = true;
     this.loader.style.display = "none";
     if (this.loaderCallback) {
@@ -156,7 +156,7 @@ export default class Detector {
     if (!this.isLoading) {
       return;
     }
-
+    this.isAnimate = false;
     this.clearCanvas();
 
     this.canvas.width = this.videoWidth;
@@ -172,6 +172,9 @@ export default class Detector {
       imgEl.height = 320;
       const img = window.tf.browser.fromPixels(imgEl);
       const square = await detect(img, this.model);
+      if (square.length > 0) {
+        await this.setLine(square);
+      }
       this.setLine(square);
     }).bind(this);
   }

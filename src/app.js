@@ -1,4 +1,4 @@
-import Detector from "./detector.js";
+import Detector from "./module/detector.js";
 
 const container = document.querySelector(".container");
 const btn1 = document.querySelector(".capture");
@@ -13,6 +13,7 @@ container.appendChild(detector.getElement());
 
 btn1.addEventListener("click", () => {
   btn1.classList.toggle("on");
+  isRealtime = false;
   if (isCapture) {
     isCapture = false;
     detector.resetCapture();
@@ -23,6 +24,10 @@ btn1.addEventListener("click", () => {
 });
 
 btn2.addEventListener("click", () => {
+  if (isCapture) {
+    return;
+  }
+  btn2.classList.toggle("on");
   if (isRealtime) {
     isRealtime = false;
     detector.setRealtimeDetect(isRealtime);
